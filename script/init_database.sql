@@ -17,10 +17,27 @@ Source Data → Bronze → Silver → Gold
 
 */
 
---creating database: DataWarehouse
-CREATE DATABASE Datawarehouse;
+USE master;
+GO
 
---PostgreSQL doesn't support CREATE DATABASE IF NOT EXISTS, but schemas do:
-CREATE SCHEMA IF NOT EXISTS bronze;
-CREATE SCHEMA IF NOT EXISTS silver;
-CREATE SCHEMA IF NOT EXISTS gold;
+-- DROP and RECREATE Database 'DataWarehouse'
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'DataWarehouse')
+BEGIN
+	ALTER DATABASE DataWarehouse SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+	DROP DATABASE DataWarehouse;
+END;
+GO
+
+--CREATE the 'DataWarehouse' database
+CREATE DATABASE DataWarehouse;
+GO
+
+USE DataWarehouse;
+GO
+
+--CREATE SCHEMAS
+CREATE SCHEMA bronze;
+GO
+CREATE SCHEMA silver;
+GO
+CREATE SCHEMA gold;
